@@ -1,6 +1,7 @@
-package com.dantask01;
+package com.dantask01.controllers;
 
 import com.dantask01.entities.Employee;
+import com.dantask01.marsh.ParseInstance;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.beanio.BeanReader;
 import org.beanio.StreamFactory;
@@ -45,8 +46,20 @@ public class Controller {
             "</employeeFile>";
 
     @RequestMapping(value = "/xml")
-    public String postXML(ModelMap modelMap) throws Exception {
-        return StringEscapeUtils.escapeHtml(string);
+    public ModelAndView postXML(ModelMap modelMap) throws Exception {
+        modelMap.addAttribute("xml",StringEscapeUtils.escapeHtml(string));
+        return new ModelAndView("xml");
+    }
+
+    @RequestMapping(value = "/instance")
+    public ModelAndView showIntance(ModelMap modelMap) throws IOException {
+        Employee e = ParseInstance.instantiate();
+        modelMap.addAttribute("firstName", e.getFirstName());
+        modelMap.addAttribute("lastName", e.getLastName());
+        modelMap.addAttribute("salary", e.getSalary());
+        modelMap.addAttribute("hireDate", e.getHireDate());
+        modelMap.addAttribute("title", e.getTitle());
+        return new ModelAndView("instance");
     }
 
 }
